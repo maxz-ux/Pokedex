@@ -8,15 +8,17 @@
 class Pokemon: Identifiable {
     var id: Int
     var name: String
+    var description: String
     var height: Int
     var weight: Int
     var types: [String]
     var stats: [PokemonStats]
     var abilities: [Ability]
     
-    init(id: Int, name: String, height: Int, weight: Int, types: [String], stats: [PokemonStats] = [], abilities: [Ability] = []) {
+    init(id: Int, name: String, description: String, height: Int, weight: Int, types: [String], stats: [PokemonStats] = [], abilities: [Ability] = []) {
         self.id = id
         self.name = name
+        self.description = description
         self.height = height
         self.weight = weight
         self.types = types
