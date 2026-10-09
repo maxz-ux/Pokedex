@@ -12,14 +12,16 @@ class Pokemon: Identifiable {
     var weight: Int
     var types: [String]
     var stats: [PokemonStats]
+    var abilities: [Ability]
     
-    init(id: Int, name: String, height: Int, weight: Int, types: [String], stats: [PokemonStats] = []) {
+    init(id: Int, name: String, height: Int, weight: Int, types: [String], stats: [PokemonStats] = [], abilities: [Ability] = []) {
         self.id = id
         self.name = name
         self.height = height
         self.weight = weight
         self.types = types
         self.stats = stats
+        self.abilities = abilities
     }
 }
 

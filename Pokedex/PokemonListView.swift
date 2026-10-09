@@ -23,7 +23,7 @@ struct PokemonListView: View {
                     VStack(alignment: .leading, spacing: 32) {
                         ForEach(pokemons, id: \.id) { pokemon in
                             NavigationLink {
-                                PokemonDetailView()
+                                PokemonDetailView(pokemon: pokemon)
                             } label: {
                                 VStack(alignment: .leading, spacing: 8) {
                                     Image(systemName: "questionmark.circle")

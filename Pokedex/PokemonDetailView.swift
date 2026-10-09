@@ -8,11 +8,28 @@
 import SwiftUI
 
 struct PokemonDetailView: View {
+    var pokemon: Pokemon
     var body: some View {
-        Text("Pokemon Detail")
+        ZStack{
+            Color(.black)
+                .ignoresSafeArea()
+            VStack(alignment:.leading, spacing: 10){
+                Image(systemName: "questionmark.circle")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 44)
+                    .foregroundColor(.white)
+                Text(pokemon.name.capitalized)
+                    .font(.title)
+                    .bold()
+                    .foregroundColor(.white)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            .padding(.horizontal, 20)
+        }
     }
 }
 
 #Preview {
-    PokemonDetailView()
+    PokemonDetailView(pokemon:pokemonList[0])
 }
