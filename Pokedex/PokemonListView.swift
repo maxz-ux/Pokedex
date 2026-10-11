@@ -9,7 +9,14 @@ import SwiftUI
 import Foundation
 
 struct PokemonListView: View {
-    let pokemons: [Pokemon]
+   let pokemons: [Pokemon]
+    @State private var searchText: String = ""
+    var pokemonListDisplay: [Pokemon] {
+        searchText.isEmpty ? pokemons : pokemons.filter { pokemon in
+        pokemon.name.localizedStandardContains(searchText)
+        }
+    }
+ 
     var body: some View {
         NavigationStack {
         ZStack {
@@ -21,7 +28,7 @@ struct PokemonListView: View {
                         .font(Font.title.bold())
                         .foregroundColor(.white)
                     VStack(alignment: .leading, spacing: 32) {
-                        ForEach(pokemons, id: \.id) { pokemon in
+                        ForEach(pokemonListDisplay, id: \.id) { pokemon in
                             NavigationLink {
                                 PokemonDetailView(pokemon: pokemon)
                             } label: {
@@ -45,14 +52,20 @@ struct PokemonListView: View {
                         }
                     }
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, 20)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, 20)
+            .overlay {
+                if pokemonListDisplay.isEmpty {
+                    ContentUnavailableView.search(text: searchText)
+                }
             }
+            }
+        .searchable(text: $searchText, prompt: "Search Pokemon")
         }
+        .preferredColorScheme(.dark)
     }
 }
-
 
 #Preview {
     PokemonListView(pokemons: pokemonList)

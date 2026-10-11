@@ -91,6 +91,7 @@ struct PokemonDetailView: View {
             .padding(.horizontal, 20)
             } // ScrollView
         }
+        .preferredColorScheme(.dark)
     }
 }
 
