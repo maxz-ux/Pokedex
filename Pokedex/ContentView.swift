@@ -10,6 +10,15 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         PokemonListView(pokemons:pokemonList)
+//            .task {
+//            do {
+//             let pokemon = try await PokemonService().fetchPokemon(id: 1)
+//            print(pokemon)
+//                    
+//            } catch {
+//                print(error)
+//            }
+//        }
     }
 }
 
