@@ -33,6 +33,10 @@ struct PokemonService {
         //Make a JSON-reading tool and call it decoder.
         let decoder = JSONDecoder()
         
+        //converts JSON keys such as base_stat into baseStat
+        //a.b = .c means “set a’s b to the value c”. It writes something.
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        
         // "let pokemon = try decoder.decode("
         // “Use the decoder to build something, and store it in pokemon. This might fail, hence try...”
         // "PokemonResponse.self," - build it using the PokemonResponse blueprint

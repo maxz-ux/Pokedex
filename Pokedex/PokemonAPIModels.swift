@@ -13,6 +13,25 @@ struct PokemonResponse: Decodable {
     let height: Int
     let weight: Int
     let types: [TypeEntry] // response.types[0].type.name (calls "grass" for bulbasaur) is how to call this in app
+    let abilities: [AbilityEntry]
+    let stats: [StatEntry]
+    let sprites: PokemonSpirte
+}
+
+struct StatEntry: Decodable {
+    let baseStat: Int
+    let stat: LinkedName
+    let effort: Int
+}
+
+struct AbilityEntry: Decodable {
+    let ability: LinkedName
+    let isHidden: Bool
+    let slot: Int
+}
+
+struct PokemonSpirte: Decodable {
+    let frontDefault: URL?
 }
 
 // Calls each type into the types property in PokemonResponse
