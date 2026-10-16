@@ -15,7 +15,28 @@ struct PokemonResponse: Decodable {
     let types: [TypeEntry] // response.types[0].type.name (calls "grass" for bulbasaur) is how to call this in app
     let abilities: [AbilityEntry]
     let stats: [StatEntry]
-    let sprites: PokemonSpirte
+    let sprites: PokemonSprite
+}
+
+struct PokemonListResponse: Decodable {
+    let count: Int
+    let next: URL?
+    let previous: URL?
+    let results: [LinkedName]
+}
+
+struct PokemonSpeciesResponse: Decodable {
+    let flavorTextEntries: [FlavorTextEntry]
+}
+
+struct PokemonAbilityResponse: Decodable {
+    let effectEntries: [EffectEntry]
+    let flavorTextEntries: [FlavorTextEntry]
+}
+
+struct FlavorTextEntry: Decodable {
+    let flavorText: String
+    let language: LinkedName
 }
 
 struct StatEntry: Decodable {
@@ -30,7 +51,13 @@ struct AbilityEntry: Decodable {
     let slot: Int
 }
 
-struct PokemonSpirte: Decodable {
+struct EffectEntry: Decodable {
+    let effect: String
+    let shortEffect: String
+    let language: LinkedName
+}
+
+struct PokemonSprite: Decodable {
     let frontDefault: URL?
 }
 
