@@ -10,39 +10,44 @@ import Foundation
 struct PokemonService {
     let baseURL: URL = URL(string: "https://pokeapi.co/api/v2/")!
     
-    // Fetches a single pokemon's properties from the pokeAPI and maps it to the PokemonResponse Struct
+    
+    // Shared helper: requests a URL, checks the response, and decodes the JSON into whatever type the caller asks for.
+    // <T: Decodable>: T is a placeholder type, filled in by the caller's return type (e.g. PokemonResponse). It must be Decodable.
     // async: “this function waits for something”, in this case the internet.
     // throws: “this function might fail”.
-    func fetchPokemon(id: Int) async throws -> PokemonResponse {
-        let url = baseURL.appending(path: "pokemon/\(id)")
-        // await: the app pauses here (without freezing the screen) until the server replies.
-        // try: this can fail (no Wi-Fi, for example). If it does, the error is passed up to whoever called fetchPokemon.
+    private func fetch <T: Decodable>(from url: URL) async throws -> T {
+        // await: pause here (without freezing the screen) until the server replies.
+        // try: this can fail (no Wi-Fi, for example). The error is passed up to whoever called fetch.
         let (data, response) = try await URLSession.shared.data(from: url)
+        
+        // response is a general URLResponse, which has no status code. as? tries to treat it as an HTTPURLResponse (which does).
+        // guard let: if that works, store it in httpResponse and carry on; if not (nil), throw an invalidResponse error.
         guard let httpResponse = response as? HTTPURLResponse else {
             throw PokemonServiceError.invalidResponse
         }
         
-        //guard    “Make sure the following is true...”
-        //(200..<300)    “...the box of numbers from 200 to 299...”
-        //.contains(    “...has inside it...”
-        //httpResponse.statusCode    “...the status code from the server’s reply...”
-        // else {    “...and if not, do what’s in this block. Return a badStatuscode error”
+        // Make sure the status code in the httpResponse is in the range 200–299 (success), otherwise throw a badStatusCode error.
         guard (200..<300).contains(httpResponse.statusCode) else {
             throw PokemonServiceError.badStatusCode(httpResponse.statusCode)
         }
-        //Make a JSON-reading tool and call it decoder.
+        
+        // Make a JSON-reading tool and call it decoder.
         let decoder = JSONDecoder()
         
-        //converts JSON keys such as base_stat into baseStat
-        //a.b = .c means “set a’s b to the value c”. It writes something.
+        // Converts JSON keys such as base_stat into baseStat.
+        // a.b = .c means “set a’s b to the value c”. It writes something.
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         
-        // "let pokemon = try decoder.decode("
-        // “Use the decoder to build something, and store it in pokemon. This might fail, hence try...”
-        // "PokemonResponse.self," - build it using the PokemonResponse blueprint
-        // "from: data" - from the raw bytes we got from the server on line 20.
-        let pokemon = try decoder.decode(PokemonResponse.self, from: data)
-        return pokemon
+        // Build a T from the raw bytes the server sent. T.self is the blueprint; try because decoding can fail.
+        let decodedData = try decoder.decode(T.self, from: data)
+        return decodedData
+    }
+    
+    
+    // Fetches a single pokemon's properties from the pokeAPI and maps it to the PokemonResponse Struct
+    func fetchPokemon(id: Int) async throws -> PokemonResponse {
+        let url = baseURL.appending(path: "pokemon/\(id)")
+        return try await fetch(from: url)
     }
     
     //Fetches a list of pokemon from pokeAPI and maps it to the PokemonListResponse Struct
@@ -53,59 +58,19 @@ struct PokemonService {
             URLQueryItem(name: "limit", value: String(limit)),
             URLQueryItem(name: "offset", value: String(offset))
         ])
-      
-        let (data, response) = try await URLSession.shared.data(from: url)
-        
-        guard let httpResponse = response as? HTTPURLResponse else {
-            throw PokemonServiceError.invalidResponse
-        }
-        guard (200..<300).contains(httpResponse.statusCode) else {
-            throw PokemonServiceError.badStatusCode(httpResponse.statusCode)
-        }
-        
-        let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
-        
-        let pokemonList = try decoder.decode(PokemonListResponse.self, from: data)
-        return pokemonList
-    
+        return try await fetch(from: url)
     }
     
     //Fetches a Pokémon’s species data (descriptions) from PokeAPI
     func fetchSpecies(id: Int) async throws -> PokemonSpeciesResponse {
         let url = baseURL.appending(path: "pokemon-species/\(id)")
-        let (data, response) = try await URLSession.shared.data(from: url)
-        
-        guard let httpResponse = response as? HTTPURLResponse else {
-            throw PokemonServiceError.invalidResponse
-        }
-        guard (200..<300).contains(httpResponse.statusCode) else {
-            throw PokemonServiceError.badStatusCode(httpResponse.statusCode)
-        }
-        
-        let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
-        
-        let pokemonSpecies = try decoder.decode(PokemonSpeciesResponse.self, from: data)
-        return pokemonSpecies
+        return try await fetch(from: url)
     }
     
     //Fetches a Pokémon’s ability data (descriptions) from PokeAPI and maps to PokemonAbilityResponse
     func fetchAbility(name: String) async throws -> PokemonAbilityResponse {
         let url = baseURL.appending(path:"ability/\(name)")
-        let (data, response) = try await URLSession.shared.data(from: url)
-        guard let httpResponse = response as? HTTPURLResponse else {
-            throw PokemonServiceError.invalidResponse
-        }
-        guard (200..<300).contains(httpResponse.statusCode) else {
-            throw PokemonServiceError.badStatusCode(httpResponse.statusCode)
-        }
-        
-        let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
-        
-        let pokemonAbility = try decoder.decode(PokemonAbilityResponse.self, from: data)
-        return pokemonAbility
+        return try await fetch(from: url)
     }
 }
 

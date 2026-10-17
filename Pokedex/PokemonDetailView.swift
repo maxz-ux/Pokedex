@@ -81,9 +81,7 @@ struct PokemonDetailView: View {
                                 Text(ability.description)
                                     .foregroundColor(.white)
                             }
-
                         }
-                        
                     }
                 }
             }
