@@ -12,8 +12,8 @@ struct ContentView: View {
         PokemonListView(pokemons:pokemonList)
 //            .task {
 //            do {
-//             let pokemon = try await PokemonService().fetchPokemon(id: 1)
-//            print(pokemon)
+//                let pokemon = try await Pokemon(response: PokemonService().fetchPokemon(id: 1))
+//                print(pokemon.id, pokemon.name, pokemon.height, pokemon.weight, pokemon.types, pokemon.stats.hp, pokemon.stats.attack, pokemon.stats.defense, pokemon.stats.specialAttack, pokemon.stats.specialDefense, pokemon.stats.speed, pokemon.abilities.map({ $0.name }))
 //                    
 //            } catch {
 //                print(error)
