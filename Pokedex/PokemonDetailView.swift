@@ -9,6 +9,8 @@ import SwiftUI
 
 struct PokemonDetailView: View {
     var pokemon: Pokemon
+    @State private var pokemonDescription = ""
+    @State private var abilityDescriptions: [String:String] = [:]
     var body: some View {
         ZStack{
             Color(.black)
@@ -43,7 +45,7 @@ struct PokemonDetailView: View {
                             .font(.title)
                             .bold()
                             .foregroundColor(.white)
-                        Text(pokemon.description)
+                        Text(pokemonDescription)
                             .foregroundColor(.white)
             }
                 VStack(alignment: .leading, spacing: 4) {
@@ -51,21 +53,18 @@ struct PokemonDetailView: View {
                         .font(.title)
                         .bold()
                         .foregroundColor(.white)
-                    ForEach(pokemon.stats.indices, id: \.self) { index in
-                        let stat = pokemon.stats[index]
-                        Text("HP: \(stat.hp)")
-                            .foregroundColor(.white)
-                        Text("Attack: \(stat.attack)")
-                            .foregroundColor(.white)
-                        Text("Defense: \(stat.defense)")
-                            .foregroundColor(.white)
-                        Text("Sp. Attack: \(stat.specialAttack)")
-                            .foregroundColor(.white)
-                        Text("Sp. Defense: \(stat.specialDefense)")
-                            .foregroundColor(.white)
-                        Text("Speed: \(stat.speed)")
-                            .foregroundColor(.white)
-                    }
+                    Text("HP: \(pokemon.stats.hp)")
+                        .foregroundColor(.white)
+                    Text("Attack: \(pokemon.stats.attack)")
+                        .foregroundColor(.white)
+                    Text("Defense: \(pokemon.stats.defense)")
+                        .foregroundColor(.white)
+                    Text("Sp. Attack: \(pokemon.stats.specialAttack)")
+                        .foregroundColor(.white)
+                    Text("Sp. Defense: \(pokemon.stats.specialDefense)")
+                        .foregroundColor(.white)
+                    Text("Speed: \(pokemon.stats.speed)")
+                        .foregroundColor(.white)
                 }
                 VStack(alignment:.leading, spacing: 4) {
                     Text("Abilities")
@@ -78,7 +77,7 @@ struct PokemonDetailView: View {
                             VStack(alignment:.leading, spacing: 4) {
                                 Text(ability.name)
                                     .foregroundColor(.white)
-                                Text(ability.description)
+                                Text(abilityDescriptions[ability.name] ?? ability.description)
                                     .foregroundColor(.white)
                             }
                         }
@@ -89,6 +88,19 @@ struct PokemonDetailView: View {
             .padding(.horizontal, 20)
             } // ScrollView
         }
+        .task {
+            do {
+                let pokemonSpecies = try await PokemonService().fetchSpecies(id: pokemon.id)
+                pokemonDescription = pokemonSpecies.englishDescription
+                for ability in pokemon.abilities {
+                    let abilityResponse = try? await PokemonService().fetchAbility(name: ability.name)
+                    abilityDescriptions[ability.name] = abilityResponse?.englishDescription
+                }
+                }
+                catch {
+               print(error)
+               }
+            }
         .preferredColorScheme(.dark)
     }
 }

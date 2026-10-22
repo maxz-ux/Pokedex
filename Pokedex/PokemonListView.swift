@@ -57,6 +57,7 @@ struct PokemonListView: View {
             }
             .overlay {
                 if pokemonListDisplay.isEmpty {
+                    // Empty State Code
                     ContentUnavailableView.search(text: searchText)
                 }
             }

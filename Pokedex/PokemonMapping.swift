@@ -25,5 +25,20 @@ extension Pokemon {
         // Maps the values from PokemonResponse onto the Pokemon Class
         self.init(id: response.id, name: response.name, description: "", height: response.height, weight: response.weight, types: typeNames, stats: pokemonStats, abilities: abilities, imageURL: response.sprites.frontDefault)
     }
-   
+}
+
+extension PokemonSpeciesResponse {
+    var englishDescription: String {
+        let englishDescription = self.flavorTextEntries.first(where: { $0.language.name == "en" })?.flavorText ?? "No description available"
+        let cleanDescription = englishDescription.replacingOccurrences(of: "\n", with: " ").replacingOccurrences(of: "\u{0C}", with: " ")
+        return cleanDescription
+    }
+}
+
+extension PokemonAbilityResponse {
+    var englishDescription: String {
+        let englishDescription = self.flavorTextEntries.last(where: { $0.language.name == "en" })?.flavorText ?? "No description available"
+        let cleanDescription = englishDescription.replacingOccurrences(of: "\n", with: " ").replacingOccurrences(of: "\u{0C}", with: " ")
+        return cleanDescription
+    }
 }
