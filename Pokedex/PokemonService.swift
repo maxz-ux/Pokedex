@@ -43,10 +43,9 @@ struct PokemonService {
         return decodedData
     }
     
-    
     // Fetches a single pokemon's properties from the pokeAPI and maps it to the PokemonResponse Struct
-    func fetchPokemon(id: Int) async throws -> PokemonResponse {
-        let url = baseURL.appending(path: "pokemon/\(id)")
+    func fetchPokemon(name: String) async throws -> PokemonResponse {
+        let url = baseURL.appending(path: "pokemon/\(name)")
         return try await fetch(from: url)
     }
     

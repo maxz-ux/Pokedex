@@ -8,17 +8,14 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @State private var store = PokemonStore()
     var body: some View {
-        PokemonListView(pokemons:pokemonList)
-//            .task {
-//            do {
-//                let pokemon = try await Pokemon(response: PokemonService().fetchPokemon(id: 1))
-//                print(pokemon.id, pokemon.name, pokemon.height, pokemon.weight, pokemon.types, pokemon.stats.hp, pokemon.stats.attack, pokemon.stats.defense, pokemon.stats.specialAttack, pokemon.stats.specialDefense, pokemon.stats.speed, pokemon.abilities.map({ $0.name }))
-//                    
-//            } catch {
-//                print(error)
-//            }
-//        }
+        PokemonListView(pokemons:store.loadedPokemon)
+            .task {
+                // no try, because loadPokemon() handles its own errors.
+                await store.loadPokemon()
+            }
     }
 }
 
