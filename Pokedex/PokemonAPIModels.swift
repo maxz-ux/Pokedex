@@ -12,7 +12,7 @@ struct PokemonResponse: Decodable {
     let name: String
     let height: Int
     let weight: Int
-    let types: [TypeEntry] // response.types[0].type.name (calls "grass" for bulbasaur) is how to call this in app
+    let types: [TypeEntry] 
     let abilities: [AbilityEntry]
     let stats: [StatEntry]
     let sprites: PokemonSprite

@@ -41,7 +41,7 @@ struct PokemonListView: View {
                                         .font(.title2)
                                         .fontWeight(.semibold)
                                         .foregroundColor(.white)
-                                    Text(pokemon.types.joined(separator: ", "))
+                                    Text(pokemon.types.joined(separator: ", ")  .capitalized)
                                         .foregroundColor(.white)
                                     HStack(spacing: 8) {
                                         Text("Height \(pokemon.height) Weight: \(pokemon.weight)")
@@ -56,7 +56,7 @@ struct PokemonListView: View {
                 .padding(.horizontal, 20)
             }
             .overlay {
-                if pokemonListDisplay.isEmpty {
+                if pokemonListDisplay.isEmpty && !searchText.isEmpty {
                     // Empty State Code
                     ContentUnavailableView.search(text: searchText)
                 }

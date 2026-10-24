@@ -33,7 +33,7 @@ struct PokemonDetailView: View {
                         .font(.title)
                         .bold()
                         .foregroundColor(.white)
-                    Text(pokemon.types.joined(separator: ", "))
+                    Text(pokemon.types.joined(separator: ", ").capitalized)
                         .foregroundColor(.white)
                     HStack(spacing: 8) {
                         Text("Height \(pokemon.height) Weight: \(pokemon.weight)")
@@ -75,7 +75,7 @@ struct PokemonDetailView: View {
                         ForEach(pokemon.abilities.indices, id: \.self) { index in
                             let ability = pokemon.abilities[index]
                             VStack(alignment:.leading, spacing: 4) {
-                                Text(ability.name)
+                                Text(ability.name.replacingOccurrences(of: "-", with: " ").capitalized)
                                     .foregroundColor(.white)
                                 Text(abilityDescriptions[ability.name] ?? ability.description)
                                     .foregroundColor(.white)
