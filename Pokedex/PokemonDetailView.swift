@@ -18,11 +18,20 @@ struct PokemonDetailView: View {
             ScrollView {
             VStack(alignment:.leading, spacing: 32) {
                 VStack(alignment:.leading, spacing: 10){
-                    Image(systemName: "questionmark.circle")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 44)
-                        .foregroundColor(.white)
+                    AsyncImage(url: pokemon.imageURL) { image in
+                        image.resizable().scaledToFit()
+                    } placeholder: {
+                        Image(systemName: "questionmark.circle")
+                            .font(.largeTitle)
+                            .foregroundStyle(Color(.white))
+                    } .frame(width: 96, height: 96, alignment: .leading)
+                        .background(Color.white.opacity(0.1))
+                        .clipShape(RoundedRectangle(cornerRadius: 4))
+//                    Image(systemName: "questionmark.circle")
+//                        .resizable()
+//                        .scaledToFit()
+//                        .frame(width: 44)
+//                        .foregroundColor(.white)
                     Text(pokemon.name.capitalized)
                         .font(.title)
                         .bold()
