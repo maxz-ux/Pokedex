@@ -27,11 +27,6 @@ struct PokemonDetailView: View {
                     } .frame(width: 96, height: 96, alignment: .leading)
                         .background(Color.white.opacity(0.1))
                         .clipShape(RoundedRectangle(cornerRadius: 4))
-//                    Image(systemName: "questionmark.circle")
-//                        .resizable()
-//                        .scaledToFit()
-//                        .frame(width: 44)
-//                        .foregroundColor(.white)
                     Text(pokemon.name.capitalized)
                         .font(.title)
                         .bold()
@@ -54,7 +49,7 @@ struct PokemonDetailView: View {
                             .font(.title)
                             .bold()
                             .foregroundColor(.white)
-                        Text(pokemonDescription)
+                        Text(pokemonDescription.isEmpty ? "No description available": pokemonDescription)
                             .foregroundColor(.white)
             }
                 VStack(alignment: .leading, spacing: 4) {
@@ -86,7 +81,7 @@ struct PokemonDetailView: View {
                             VStack(alignment:.leading, spacing: 4) {
                                 Text(ability.name.replacingOccurrences(of: "-", with: " ").capitalized)
                                     .foregroundColor(.white)
-                                Text(abilityDescriptions[ability.name] ?? ability.description)
+                                Text(abilityDescriptions[ability.name] ?? "No description available")
                                     .foregroundColor(.white)
                             }
                         }
@@ -98,18 +93,13 @@ struct PokemonDetailView: View {
             } // ScrollView
         }
         .task {
-            do {
-                let pokemonSpecies = try await PokemonService().fetchSpecies(id: pokemon.id)
-                pokemonDescription = pokemonSpecies.englishDescription
-                for ability in pokemon.abilities {
-                    let abilityResponse = try? await PokemonService().fetchAbility(name: ability.name)
-                    abilityDescriptions[ability.name] = abilityResponse?.englishDescription
-                }
-                }
-                catch {
-               print(error)
-               }
+            let pokemonSpecies = try? await PokemonService().fetchSpecies(id: pokemon.id)
+            pokemonDescription = pokemonSpecies?.englishDescription ?? ""
+            for ability in pokemon.abilities {
+                let abilityResponse = try? await PokemonService().fetchAbility(name: ability.name)
+                abilityDescriptions[ability.name] = abilityResponse?.englishDescription
             }
+        }
         .preferredColorScheme(.dark)
     }
 }

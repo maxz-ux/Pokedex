@@ -16,9 +16,12 @@ struct PokemonService {
     // async: “this function waits for something”, in this case the internet.
     // throws: “this function might fail”.
     private func fetch <T: Decodable>(from url: URL) async throws -> T {
+        
+        // Allows the list of pokemon and all previously opened descriptions (pokemon & ability) to be loaded offline
+        let newRequest = URLRequest(url: url,cachePolicy:.returnCacheDataElseLoad)
         // await: pause here (without freezing the screen) until the server replies.
         // try: this can fail (no Wi-Fi, for example). The error is passed up to whoever called fetch.
-        let (data, response) = try await URLSession.shared.data(from: url)
+        let (data, response) = try await URLSession.shared.data(for: newRequest)
         
         // response is a general URLResponse, which has no status code. as? tries to treat it as an HTTPURLResponse (which does).
         // guard let: if that works, store it in httpResponse and carry on; if not (nil), throw an invalidResponse error.
