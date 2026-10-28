@@ -13,7 +13,6 @@ struct ContentView: View {
     var body: some View {
         ZStack {
             Color.black.ignoresSafeArea()
-            
             if store.isLoading {
                 ProgressView("Loading Pokemon...")
             } else if let message = store.errorMessage {

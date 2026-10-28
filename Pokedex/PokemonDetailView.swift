@@ -18,15 +18,7 @@ struct PokemonDetailView: View {
             ScrollView {
             VStack(alignment:.leading, spacing: 32) {
                 VStack(alignment:.leading, spacing: 10){
-                    AsyncImage(url: pokemon.imageURL) { image in
-                        image.resizable().scaledToFit()
-                    } placeholder: {
-                        Image(systemName: "questionmark.circle")
-                            .font(.largeTitle)
-                            .foregroundStyle(Color(.white))
-                    } .frame(width: 96, height: 96, alignment: .leading)
-                        .background(Color.white.opacity(0.1))
-                        .clipShape(RoundedRectangle(cornerRadius: 4))
+                    PokemonSpriteView(url: pokemon.imageURL, size: 96)
                     Text(pokemon.name.capitalized)
                         .font(.title)
                         .bold()
