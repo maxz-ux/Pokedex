@@ -18,7 +18,7 @@ struct PokemonDetailView: View {
             ScrollView {
             VStack(alignment:.leading, spacing: 32) {
                 VStack(alignment:.leading, spacing: 10){
-                    PokemonSpriteView(url: pokemon.imageURL, size: 96)
+                    PokemonSpriteView(url: pokemon.imageURL, size: 160)
                     Text(pokemon.name.capitalized)
                         .font(.title)
                         .bold()

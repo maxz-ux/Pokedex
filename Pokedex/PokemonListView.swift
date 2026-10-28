@@ -33,12 +33,12 @@ struct PokemonListView: View {
                                 PokemonDetailView(pokemon: pokemon)
                             } label: {
                                 VStack(alignment: .leading, spacing: 8) {
-                                    PokemonSpriteView(url: pokemon.imageURL, size: 96)
+                                    PokemonSpriteView(url: pokemon.imageURL, size: 160)
                                     Text("#\(String(pokemon.id)) \(pokemon.name.capitalized)")
                                         .font(.title2)
                                         .fontWeight(.semibold)
                                         .foregroundColor(.white)
-                                    Text(pokemon.types.joined(separator: ", ")  .capitalized)
+                                    Text(pokemon.types.joined(separator: ", ") .capitalized)
                                         .foregroundColor(.white)
                                     HStack(spacing: 8) {
                                         Text("Height \(pokemon.height) Weight: \(pokemon.weight)")
